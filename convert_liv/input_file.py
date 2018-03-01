@@ -22,6 +22,12 @@ class InputFile:
         if(self.length == data_seq):
             return True
         else:
-            return False
+            return 
+        
+    def data_len(self):
+        return self.framerate * len(self.data)
+    
+    def set_label(self, label):
+        self.label = label
         
         
