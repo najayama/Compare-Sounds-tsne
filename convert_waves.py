@@ -27,20 +27,21 @@ cut_length = cui_input("切り取りたい音声の長さを秒(float型)で指�
 #ファイルとstart地点を入力するプロンプトを表示
 convert_list = []
 while True:
-    command = input("コマンドを入力してください。\n"
-          "v:変換予定リストを見る\n"
-          "a:変換予定リストに加える\n"
-          "d:変換予定リストから削除する"
+    command = input("コマンドを入力してください（hでヘルプ）h/v/a/d/s/q > ")[0]   
+    if command == "h":
+        print("h:ヘルプを表示\n"
+            "v:変換予定リストを見る\n"
+          "a:変換予定リストにファイルを加える\n"
+          "d:変換予定リストから削除する\n"
           "s:変換を開始する\n"
-          "q:中止して終了する\n"
-          "v/a/d/s/q > ")[0]   
-    
-    if command == "v":
+          "q:中止して終了する\n")
+        
+    elif command == "v":
         if convert_list == []:
             print("変換予定リストは空です")
         else:
             for infile in convert_list:
-                infile.show()
+                infile.show_params()
     
     elif command == "a":
         #wavファイルを選択してもらうwindowを表示
@@ -69,10 +70,12 @@ while True:
                 pass
         
         #InputFileオブジェクトを生成
+        
+        last_label = ""
         for start in start_list:
             fs, data = load_wave(wav_fname, start, cut_length)
             in_file = InputFile(
-                path
+                wav_fname
                 ,fs
                 ,data
                 ,start
@@ -82,11 +85,12 @@ while True:
                 convert_list.append(in_file)
             else:
                 print("{}秒からだと{}秒のデータしか得られなかったのでスキップします"
-                      .format(start, in_file.data_len))
+                      .format(start, in_file.data_len()))
                 continue
+
                 
             #t-sneで使うラベルを設定するプロンプト
-            last_label = ""
+            
             if last_label == "":
                 label = cui_input(
                     "{}秒から切り取るデータのラベルを入力してください。".format(start)
@@ -103,6 +107,8 @@ while True:
                 
                 if(label == ""):
                     label = last_label
+                else:
+                    last_label = label
 
             in_file.set_label(label)
             
@@ -113,7 +119,7 @@ while True:
             continue
         for i in range(len(convert_list)):
             print("{}:".format(i+1), end=" ")
-            infile.show()
+            infile.show_params()
             
         del_num = cui_input("削除したい番号を選択してください", converter=int)
         convert_list.pop(del_num - 1)
@@ -140,11 +146,11 @@ while True:
             
             outf.close()
             
-        elif command == "q":
+    elif command == "q":
             break
         
-        else:
-            print("v, a, d, s, qのどれかを入れてください！")
+    else:
+            print("h, v, a, d, s, qのどれかを入れてください！")
             
 
             
