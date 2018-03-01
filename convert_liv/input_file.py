@@ -10,27 +10,28 @@ class InputFile:
         self.data = data
         self.start = float(start)
         self.length = length
+        self.label = ""
         
     def show_params(self):
         """
         show parametars
         """
-        print("filename: {}, start={}".format(
+        print("filename: {}, start={}, label={}".format(
             os.path.basename(self.inpath)
-            , self.start))
+            , self.start, self.label))
         
     def check_convertable(self):
         """
         得られたデータが指定した長さか確認する
         """
-        data_seq =  self.framerate * len(self.data)
+        data_seq = len(self.data) / self.framerate
         if(self.length == data_seq):
             return True
         else:
             return False
         
     def data_len(self):
-        return self.framerate * len(self.data)
+        return len(self.data) / self.framerate 
     
     def set_label(self, label):
         self.label = label
