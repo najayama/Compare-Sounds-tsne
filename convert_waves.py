@@ -1,5 +1,6 @@
 import os
 import tkinter, tkinter.filedialog, tkinter.messagebox
+import csv
 
 from input_liv.cui_input import cui_input
 from convert_liv.input_file import InputFile
@@ -89,7 +90,7 @@ while True:
             if last_label == "":
                 label = cui_input(
                     "{}秒から切り取るデータのラベルを入力してください。".format(start)
-                    + "(t-sneで使います。)\n例：怒り、太鼓の音> "
+                    + "(t-sneで使います。)\n例：怒り,太鼓の音, etc> "
                 )
             
                 last_label = label
@@ -123,6 +124,31 @@ while True:
             continue
         
         for in_file in convert_list:
+            #calc fft
+            amplitudeSpectrum = in_file.calc_fft()
+            
+            #write data
+            outf = open(in_file.ofilename, "w", newline = "")
+            writer = csv.writer(outf)
+            
+            #write meta data
+            writer.writerows([[
+                "length = {}".format(in_file.length)
+                + "  label = {}".format(in_file.label)]])
+            #write fft data
+            writer.writerows(amplitudeSpectrum)
+            
+            outf.close()
+            
+        elif command == "q":
+            break
+        
+        else:
+            print("v, a, d, s, qのどれかを入れてください！")
+            
+
+            
+            
             
     
     
