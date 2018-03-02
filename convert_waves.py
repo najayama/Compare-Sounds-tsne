@@ -27,8 +27,8 @@ cut_length = cui_input("切り取りたい音声の長さを秒(float型)で指�
 #ファイルとstart地点を入力するプロンプトを表示
 convert_list = []
 while True:
-    command = input("コマンドを入力してください（hでヘルプ）h/v/a/d/s/q > ")[0]   
-    if command == "h":
+    command = input("コマンドを入力してください（hでヘルプ）h/v/a/d/s/q > ")
+    if command == "h" or command == "":
         print("h:ヘルプを表示\n"
             "v:変換予定リストを見る\n"
           "a:変換予定リストにファイルを加える\n"
@@ -36,14 +36,14 @@ while True:
           "s:変換を開始する\n"
           "q:中止して終了する\n")
         
-    elif command == "v":
+    elif command[0] == "v":
         if convert_list == []:
             print("変換予定リストは空です")
         else:
             for infile in convert_list:
                 infile.show_params()
     
-    elif command == "a":
+    elif command[0] == "a":
         #wavファイルを選択してもらうwindowを表示
         wav_fname ="" 
         while not wav_fname:
@@ -113,7 +113,7 @@ while True:
             in_file.set_label(label)
             
     
-    elif command == "d":
+    elif command[0] == "d":
         if convert_list == []:
             print("変換予定リストは空です")
             continue
@@ -127,29 +127,41 @@ while True:
         except:
             print("指定された番号が異常です。")
         
-    elif command == "s":
+    elif command[0] == "s":
         if convert_list == []:
             print("リストは空です")
             continue
         
+        total_file = len(convert_list)
+        current_file = 0
+        
         for in_file in convert_list:
+            current_file += 1
+            #進捗を出力
+            print("{}/{}: {} -> {}/{}"
+                  .format(total_file
+                          , current_file
+                          , os.path.basename(in_file.inpath)
+                          ,out_dir
+                          ,in_file.ofilename))
             #calc fft
             amplitudeSpectrum = in_file.calc_fft()
             
             #write data
-            outf = open(in_file.ofilename, "w", newline = "")
+            outf = open(out_dir + "/" + in_file.ofilename, "w", newline = "")
             writer = csv.writer(outf)
             
             #write meta data
             writer.writerows([[
-                "length = {}".format(in_file.length)
+                "start = {}".format(in_file.start)
+                +"length = {}".format(in_file.length)
                 + "  label = {}".format(in_file.label)]])
             #write fft data
             writer.writerows([x] for x in amplitudeSpectrum)
             
             outf.close()
             
-    elif command == "q":
+    elif command[0] == "q":
             break
         
     else:
