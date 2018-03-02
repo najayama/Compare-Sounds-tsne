@@ -119,10 +119,13 @@ while True:
             continue
         for i in range(len(convert_list)):
             print("{}:".format(i+1), end=" ")
-            infile.show_params()
+            convert_list[i].show_params()
             
         del_num = cui_input("削除したい番号を選択してください", converter=int)
-        convert_list.pop(del_num - 1)
+        try:
+            convert_list.pop(del_num - 1)
+        except:
+            print("指定された番号が異常です。")
         
     elif command == "s":
         if convert_list == []:
@@ -142,7 +145,7 @@ while True:
                 "length = {}".format(in_file.length)
                 + "  label = {}".format(in_file.label)]])
             #write fft data
-            writer.writerows(amplitudeSpectrum)
+            writer.writerows([x] for x in amplitudeSpectrum)
             
             outf.close()
             

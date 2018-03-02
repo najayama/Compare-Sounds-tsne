@@ -24,8 +24,7 @@ class InputFile:
         """
         得られたデータが指定した長さか確認する
         """
-        data_seq = len(self.data) / self.framerate
-        if(self.length == data_seq):
+        if(int(self.length * self.framerate) == len(self.data)):
             return True
         else:
             return False

@@ -10,7 +10,14 @@ def load_wave(path, start, length):
     
     #秒をフレームに換算
     fs = in_file.getframerate()
-    start_frame = start * fs
+    start_frame = int(start * fs)
+    
+    #file をシーク
+    if start_frame > in_file.getnframes():
+        return 1, []
+    in_file.setpos(start_frame)
+    
+    
     r_frame = length * fs 
 
     #整数データを量子化ビット数に応じて正規化    
