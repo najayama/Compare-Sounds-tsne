@@ -27,13 +27,18 @@ def plot_embedding(X, label_list, title=None):
     plt.figure()
     ax = plt.subplot(111)
     for i in range(X.shape[0]):
-        plt.text(X[i, 0], X[i, 1], str(label_list[i]),
+        plt.text(X[i, 0], X[i, 1], str(label_dict[label_list[i]]),
                  color=plt.cm.Set1(label_dict[label_list[i]]),
                  fontdict={'weight': 'bold', 'size': 9})  
 
     plt.xticks([]), plt.yticks([])
     if title is not None:
         plt.title(title)
+    
+    #汎例を表示
+    for i in label_dict:
+        print("{}:{}".format(i, label_dict[i]))
+    
     
     plt.show()
 
@@ -158,7 +163,7 @@ X_tsne = tsne.fit_transform(X)
 plot_embedding(
     X_tsne
     ,label_list
-     ,"t-SNE embedding of the digits" )
+     ,"result of t-sne" )
 
 
         
