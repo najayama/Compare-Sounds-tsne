@@ -49,20 +49,14 @@ fTyp = [("","*")]
 iDir = os.path.abspath(os.path.dirname(__file__))
 
 
-###debug_region and shuld be uncommented
-#input_dir ="" 
-#while not input_dir:
-    #tkinter.messagebox.showinfo(
-        #"フォルダを選択"
-        #,"比較したいcsvファイルがあるディレクトリを選んでください")
-    #input_dir = tkinter.filedialog.askdirectory(initialdir = iDir)
-    #input_dir = os.path.abspath(input_dir)
-###debug_line
+input_dir ="" 
+while not input_dir:
+    tkinter.messagebox.showinfo(
+        "フォルダを選択"
+        ,"比較したいcsvファイルがあるディレクトリを選んでください")
+    input_dir = tkinter.filedialog.askdirectory(initialdir = iDir)
+    input_dir = os.path.abspath(input_dir)
    
-####debug_line 
-input_dir = "/home/naja/Templates/tsne-testout"
-###debug_line
-
 
 #すべてのファイルのリストを得る
 ls = os.listdir(input_dir)
